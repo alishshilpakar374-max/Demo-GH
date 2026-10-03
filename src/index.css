@@ -1,0 +1,431 @@
+/* ==================================================
+   Khwapa Chhen — Design System
+   Tailwind CSS v4 | Newari Heritage
+   --------------------------------------------------
+   Structure (top to bottom):
+   1. Fonts + Tailwind import
+   2. Design tokens   (:root)       -> raw values, easy to override (e.g. dark mode)
+   3. Tailwind theme  (@theme)      -> exposes tokens as utilities (bg-primary, etc.)
+   4. Base styles     (@layer base) -> element defaults, losable by utilities
+   5. Custom utilities (@utility)   -> work with hover:, md:, focus: variants
+   6. Keyframes
+   ================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap");
+@import "tailwindcss";
+
+/* ==================================================
+   2. Design Tokens
+   ================================================== */
+
+@layer base {
+  :root {
+    /* Brand */
+    --root-primary: #8b261d;
+    --root-primary-hover: #6f221a;
+    --root-primary-light: #b56753;
+
+    /* Gold & Brass
+       NOTE: gold on light backgrounds fails text contrast.
+       Use gold for borders, icons and dark backgrounds, not body text. */
+    --root-gold: #d4af37;
+    --root-gold-dark: #a8841a;
+    --root-gold-light: #f4e7c3;
+
+    /* Backgrounds */
+    --root-bg: #fdfbf7;
+    --root-surface: #ffffff;
+    --root-bg-muted: #f4f0e8;
+    --root-bg-dark: #1f1b18;
+    --root-overlay: rgb(31 27 24 / 75%);
+
+    /* Text */
+    --root-text: #2c2c2c;
+    --root-text-muted: #6b635b;
+    --root-text-light: #fdfbf7;
+
+    /* Status */
+    --root-success: #2e7d32;
+    --root-error: #c62828;
+    --root-warning: #b85c00;
+    --root-info: #0288d1;
+
+    /* Typography */
+    --root-font-heading: "Cinzel", Georgia, "Times New Roman", serif;
+    --root-font-body:
+      "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    /* Shadows */
+    --root-shadow-sm: 0 1px 3px rgb(31 27 24 / 8%);
+    --root-shadow-md: 0 4px 12px rgb(31 27 24 / 12%);
+    --root-shadow-lg: 0 10px 25px rgb(31 27 24 / 18%);
+    --root-shadow-gold: 0 4px 20px rgb(212 175 55 / 25%);
+
+    /* Borders */
+    --root-border: #e8dfd2;
+    --root-radius-sm: 0.375rem;
+    --root-radius-md: 0.5rem;
+    --root-radius-lg: 0.75rem;
+    --root-radius-xl: 1rem;
+    --root-radius-full: 9999px;
+
+    /* Transitions */
+    --root-transition-fast: 150ms ease;
+    --root-transition-normal: 250ms ease;
+    --root-transition-slow: 400ms ease;
+
+    /* Layout */
+    --root-container: 1280px;
+    --root-page-gutter: clamp(1rem, 5vw, 5rem);
+    --root-header-height: 5rem; /* keep in sync with your sticky navbar */
+
+    /* Animations */
+    --root-animate-fade-in: fadeIn 0.5s ease-out both;
+    --root-animate-fade-up: fadeUp 0.6s ease-out both;
+    --root-animate-scale-in: scaleIn 0.35s ease-out both;
+  }
+}
+
+/* ==================================================
+   3. Tailwind CSS v4 Theme
+   `inline` makes utilities reference the --root-* variables directly,
+   so overriding a --root-* value later (dark mode, themes) just works.
+   ================================================== */
+
+@theme inline {
+  /* Brand */
+  --color-primary: var(--root-primary);
+  --color-primary-hover: var(--root-primary-hover);
+  --color-primary-light: var(--root-primary-light);
+
+  /* Gold */
+  --color-gold: var(--root-gold);
+  --color-gold-dark: var(--root-gold-dark);
+  --color-gold-light: var(--root-gold-light);
+
+  /* Backgrounds */
+  --color-bg: var(--root-bg);
+  --color-surface: var(--root-surface);
+  --color-bg-muted: var(--root-bg-muted);
+  --color-bg-dark: var(--root-bg-dark);
+  --color-overlay: var(--root-overlay);
+
+  /* Text */
+  --color-text: var(--root-text);
+  --color-text-muted: var(--root-text-muted);
+  --color-text-light: var(--root-text-light);
+
+  /* Status */
+  --color-success: var(--root-success);
+  --color-error: var(--root-error);
+  --color-warning: var(--root-warning);
+  --color-info: var(--root-info);
+
+  /* Typography
+     --font-sans overrides Tailwind's default, so everything without an
+     explicit font class automatically uses the body font. */
+  --font-sans: var(--root-font-body);
+  --font-body: var(--root-font-body);
+  --font-heading: var(--root-font-heading);
+
+  /* Shadows */
+  --shadow-sm: var(--root-shadow-sm);
+  --shadow-md: var(--root-shadow-md);
+  --shadow-lg: var(--root-shadow-lg);
+  --shadow-gold: var(--root-shadow-gold);
+
+  /* Borders & Radius */
+  --color-border: var(--root-border);
+  --radius-sm: var(--root-radius-sm);
+  --radius-md: var(--root-radius-md);
+  --radius-lg: var(--root-radius-lg);
+  --radius-xl: var(--root-radius-xl);
+  --radius-full: var(--root-radius-full);
+
+  /* Animations -> generates animate-fade-in / animate-fade-up / animate-scale-in */
+  --animate-fade-in: var(--root-animate-fade-in);
+  --animate-fade-up: var(--root-animate-fade-up);
+  --animate-scale-in: var(--root-animate-scale-in);
+}
+
+/* ==================================================
+   4. Base Styles
+   Wrapped in @layer base so Tailwind utilities can override them.
+   (Unlayered CSS beats ALL layered CSS, even utilities!)
+   Tailwind's preflight already handles box-sizing, margins, img/svg
+   display, form-control fonts and link resets, so we don't repeat them.
+   ================================================== */
+
+@layer base {
+  html {
+    scroll-padding-top: var(--root-header-height);
+    scrollbar-width: thin;
+    scrollbar-color: var(--root-primary) var(--root-bg-muted);
+  }
+
+  /* Smooth scrolling only for people who haven't asked for less motion */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    min-width: 320px;
+    min-height: 100dvh; /* dvh = correct height on mobile browsers with collapsing toolbars */
+    overflow-x: clip;
+    background: var(--root-bg);
+    color: var(--root-text);
+    font-family: var(--root-font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
+    font-family: var(--root-font-heading);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+    text-wrap: balance; /* avoids one lonely word on the last line */
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Interactive elements */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  ::selection {
+    background: var(--root-primary);
+    color: #ffffff;
+  }
+
+  /* Keyboard focus */
+  :focus-visible {
+    outline: 2px solid var(--root-gold-dark);
+    outline-offset: 4px;
+  }
+
+  /* gold-dark is hard to see on dark backgrounds, so switch to light gold */
+  .bg-heritage-gradient :focus-visible,
+  .bg-bg-dark :focus-visible {
+    outline-color: var(--root-gold-light);
+  }
+
+  /* Reduced motion: respect the OS setting */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Print */
+  @media print {
+    body {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .no-print,
+    nav {
+      display: none !important;
+    }
+
+    * {
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+  }
+}
+
+/* Scrollbar: standard properties (above, on html) cover Chrome 121+,
+   Firefox and Safari 18.2+. The WebKit fallback below is only for older
+   browsers and is ignored wherever scrollbar-color is supported. */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--root-bg-muted);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 2px solid var(--root-bg-muted);
+    border-radius: var(--root-radius-full);
+    background: var(--root-primary);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--root-primary-hover);
+  }
+}
+
+/* ==================================================
+   5. Heritage Utilities
+   @utility = real Tailwind utilities: they support hover:, md:,
+   focus-visible:, dark: etc. and are sorted correctly against other utilities.
+   ================================================== */
+
+@utility container-heritage {
+  width: min(calc(100% - var(--root-page-gutter) * 2), var(--root-container));
+  margin-inline: auto;
+}
+
+/* clamp() already bottoms out at 3rem on phones, so no media query needed */
+@utility section-spacing {
+  padding-block: clamp(3rem, 7vw, 6rem);
+}
+
+@utility bg-heritage-pattern {
+  background-color: var(--root-bg);
+  background-image: radial-gradient(
+    circle,
+    rgb(168 132 26 / 22%) 0.75px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+}
+
+@utility bg-heritage-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--root-bg-dark),
+    var(--root-primary-hover),
+    var(--root-bg-dark)
+  );
+}
+
+/* Use ONLY on dark backgrounds: the light end of this gradient is
+   nearly invisible on cream. */
+@utility text-gradient-gold {
+  background: linear-gradient(
+    120deg,
+    var(--root-gold-light),
+    var(--root-gold),
+    var(--root-gold-dark)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@utility surface-heritage {
+  border: 1px solid var(--root-border);
+  border-radius: var(--root-radius-lg);
+  background: var(--root-surface);
+  box-shadow: var(--root-shadow-sm);
+  transition:
+    box-shadow var(--root-transition-normal),
+    border-color var(--root-transition-normal);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--root-gold);
+    box-shadow: var(--root-shadow-md);
+  }
+}
+
+@utility hover-lift {
+  transition:
+    transform var(--root-transition-normal),
+    box-shadow var(--root-transition-normal);
+
+  /* Only lift on devices that can really hover (not on touch screens,
+     where :hover "sticks" after a tap) */
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--root-shadow-lg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+@utility border-gold-accent {
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      transparent,
+      var(--root-gold),
+      transparent
+    )
+    1;
+}
+
+/* ==================================================
+   6. Keyframes
+   (animate-fade-in / fade-up / scale-in come from @theme above;
+   the duplicate .animate-* classes were removed.)
+   ================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
