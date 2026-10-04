@@ -14,10 +14,10 @@ import { getDefaultDates, nextDay, toISODate } from "../../utils/dateUtils";
 import type { RoomCategory } from "../../types/room";
 
 const inputClass =
-  "w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text transition-all duration-200 placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10";
+  "w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-black transition-all duration-200 placeholder:text-text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10";
 
 const labelClass =
-  "mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted";
+  "mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-black ";
 
 export default function BookingBar() {
   const dispatch = useAppDispatch();
@@ -96,7 +96,11 @@ export default function BookingBar() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl rounded-2xl border border-border bg-surface/95 p-3 shadow-lg backdrop-blur-md sm:p-4 lg:p-5">
+    <div
+      className="mx-auto w-full max-w-6xl rounded-2xl border border-border  p-3 shadow-lg backdrop-blur-md sm:p-4 lg:p-5 
+     bg-white/96
+    "
+    >
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[1.15fr_1.15fr_0.8fr_1.1fr_0.85fr] lg:items-end"

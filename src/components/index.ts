@@ -4,6 +4,8 @@ import Lightbox from "./gallery/Lightbox";
 import BookingModal from "./booking/BookingModal";
 import BookingSummary from "./booking/BookingSummary";
 import Toast from "./ui/Toast";
+import ToggleTheme from "./ui/ToggleTheme";
+import Container from "./container/Container";
 
 export {
   ScrollToTop,
@@ -12,4 +14,6 @@ export {
   BookingModal,
   BookingSummary,
   Toast,
+  ToggleTheme,
+  Container,
 };

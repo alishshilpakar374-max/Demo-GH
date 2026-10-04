@@ -1,5 +1,6 @@
 // src/pages/Rooms.tsx
 import { BedDouble, Calendar, Coffee, Star, Wifi, Wind } from "lucide-react";
+import { Container } from "../components";
 
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import {
@@ -102,65 +103,67 @@ export default function Rooms() {
   const rooms = useAppSelector(selectFilteredRooms);
 
   return (
-    <section
-      id="rooms"
-      className="relative scroll-mt-(--root-header-height) bg-bg-muted py-24"
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Heading */}
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-          <span className="mb-2 block text-sm font-semibold uppercase tracking-widest text-primary">
-            Refined Living
-          </span>
-          <h2 className="font-heading text-3xl font-bold text-text sm:text-4xl md:text-5xl">
-            Suites &amp; Accommodations
-          </h2>
-          <p className="mt-3 text-sm text-text-muted sm:text-base">
-            Designed with organic textures, ambient lighting, and high-end
-            amenities for your maximum comfort.
-          </p>
-        </div>
+    <Container>
+      <section
+        id="rooms"
+        className="relative scroll-mt-(--root-header-height) bg-bg-muted py-24"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Heading */}
+          <div className="mx-auto mb-12 max-w-2xl text-center">
+            <span className="mb-2 block text-sm font-semibold uppercase tracking-widest text-primary">
+              Refined Living
+            </span>
+            <h2 className="font-heading text-3xl font-bold text-text sm:text-4xl md:text-5xl">
+              Suites &amp; Accommodations
+            </h2>
+            <p className="mt-3 text-sm text-text-muted sm:text-base">
+              Designed with organic textures, ambient lighting, and high-end
+              amenities for your maximum comfort.
+            </p>
+          </div>
 
-        {/* Filter buttons */}
-        <div
-          role="group"
-          aria-label="Filter rooms by category"
-          className="mb-12 flex flex-wrap items-center justify-center gap-2"
-        >
-          {FILTERS.map(({ value, label }) => {
-            const isActive = category === value;
-            return (
-              <button
-                key={value}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() => dispatch(setCategory(value))}
-                className={`rounded-full border px-6 py-2.5 text-sm font-medium shadow-sm transition-all ${
-                  isActive
-                    ? "border-primary bg-primary text-text-light"
-                    : "border-border bg-surface text-text hover:border-primary"
-                }`}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
+          {/* Filter buttons */}
+          <div
+            role="group"
+            aria-label="Filter rooms by category"
+            className="mb-12 flex flex-wrap items-center justify-center gap-2"
+          >
+            {FILTERS.map(({ value, label }) => {
+              const isActive = category === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => dispatch(setCategory(value))}
+                  className={`rounded-full border px-6 py-2.5 text-sm font-medium shadow-sm transition-all ${
+                    isActive
+                      ? "border-primary bg-primary text-text-light"
+                      : "border-border bg-surface text-text hover:border-primary"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
 
-        {/* Cards. `key` includes the category so the fade-up replays on filter change */}
-        <div
-          key={category}
-          className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {rooms.map((room) => (
-            <RoomCard
-              key={room.id}
-              room={room}
-              onReserve={(id) => dispatch(openBookingModal(id))}
-            />
-          ))}
+          {/* Cards. `key` includes the category so the fade-up replays on filter change */}
+          <div
+            key={category}
+            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {rooms.map((room) => (
+              <RoomCard
+                key={room.id}
+                room={room}
+                onReserve={(id) => dispatch(openBookingModal(id))}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Container>
   );
 }

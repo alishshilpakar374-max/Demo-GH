@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { CalendarDays, Menu, X } from "lucide-react";
 
 import { logo } from "../assets";
+import { ToggleTheme } from "../components";
 
 const navItems = [
   { href: "#home", label: "Home" },
@@ -92,7 +93,7 @@ export default function Header() {
 
   const navLinkClass = `
     relative rounded-lg px-3 py-2 text-sm font-medium
-    transition-colors duration-300
+    transition-colors duration-300 hover:bg-white/20 
     ${
       merged
         ? "text-white/80 hover:bg-white/10 hover:text-white"
@@ -102,15 +103,17 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b transition-all duration-500 ${surfaceClass}`}
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+        surfaceClass
+      }`}
     >
       {/* Decorative gold accent */}
       <div className="h-0.5 bg-linear-to-r from-transparent via-gold to-transparent" />
 
-      {/* Main navigation bar */}
+      {/* Main navigation */}
       <div
         className={`mx-auto flex max-w-7xl items-center justify-between px-4 transition-[height] duration-300 sm:px-6 lg:px-8 ${
-          scrolled ? "h-16" : "h-18"
+          scrolled ? "h-16" : "h-20"
         }`}
       >
         {/* Brand */}
@@ -126,14 +129,13 @@ export default function Header() {
           <img
             src={logo}
             alt=""
-            className="size-13 object-contain transition-transform duration-300 group-hover:scale-105 sm:size-15 lg:size-15"
+            className="size-11 object-contain transition-transform duration-300 group-hover:scale-105 sm:size-13 lg:size-14"
           />
 
           <div className="flex flex-col items-center">
-            {/* Brand name */}
             <span
-              className={`font-heading text-[15px] font-bold leading-none tracking-[0.04em] transition-colors duration-300 sm:text-base lg:text-lg ${
-                merged ? "text-white" : "text-primary"
+              className={`font-heading text-sm font-bold leading-tight tracking-wide transition-colors duration-300 sm:text-base lg:text-lg ${
+                merged ? "text-white" : "text-primary dark:text-gold"
               }`}
             >
               Khwapa Chhen
@@ -141,15 +143,14 @@ export default function Header() {
 
             {/* Heritage divider */}
             <div className="my-1 flex items-center justify-center gap-1.5">
-              <span className="h-px w-10 bg-gold/70 sm:w-12" />
-              <span className="size-1.5 rotate-45 bg-gold" />
-              <span className="h-px w-10 bg-gold/70 sm:w-12" />
+              <span className="h-px w-8 bg-gold/60 sm:w-10" />
+              <span className="size-1 rotate-45 bg-gold" />
+              <span className="h-px w-8 bg-gold/60 sm:w-10" />
             </div>
 
-            {/* Subtitle */}
             <span
-              className={`font-body text-[7px] font-medium uppercase leading-none tracking-[0.16em] transition-colors duration-300 sm:text-[8px] ${
-                merged ? "text-white/70" : "text-text-muted"
+              className={`font-body text-[7px] font-medium uppercase leading-none tracking-[0.15em] transition-colors duration-300 sm:text-[8px] ${
+                merged ? "text-white/75" : "text-text-muted"
               }`}
             >
               Guest House & Restaurant
@@ -170,15 +171,18 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setActiveSection(item.href.slice(1))}
-                className={`${navLinkClass} ${
-                  isActive ? "text-gold hover:text-gold" : ""
+                aria-current={isActive ? "location" : undefined}
+                className={`${navLinkClass} relative rounded-lg px-3 py-2 transition-colors duration-200 ${
+                  isActive
+                    ? "text-primary dark:text-gold"
+                    : "hover:text-primary dark:hover:text-gold"
                 }`}
               >
                 {item.label}
 
                 <span
                   aria-hidden="true"
-                  className={`absolute inset-x-3 bottom-0 h-0.5 origin-center rounded-full bg-gold transition-transform duration-200 ${
+                  className={`absolute inset-x-3 bottom-0 h-0.5 origin-center rounded-full bg-gold transition-transform duration-300 ${
                     isActive ? "scale-x-100" : "scale-x-0"
                   }`}
                 />
@@ -188,7 +192,9 @@ export default function Header() {
         </nav>
 
         {/* Desktop actions */}
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-3 lg:flex">
+          <ToggleTheme />
+
           <a
             href="https://www.booking.com/hotel/np/khwapa-chhen-bhaktapur.en-gb.html"
             target="_blank"
@@ -203,21 +209,25 @@ export default function Header() {
           </a>
         </div>
 
-        {/* Mobile menu toggle */}
-        <button
-          type="button"
-          onClick={() => setMobileOpen((previous) => !previous)}
-          className={`flex size-10 items-center justify-center rounded-lg transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold lg:hidden ${
-            merged
-              ? "text-white hover:bg-white/10"
-              : "text-text hover:bg-white/40 hover:text-primary"
-          }`}
-          aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-navigation"
-        >
-          {mobileOpen ? <X size={23} /> : <Menu size={23} />}
-        </button>
+        {/* Mobile actions */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <ToggleTheme />
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((previous) => !previous)}
+            className={`flex size-10 items-center justify-center rounded-lg transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${
+              merged
+                ? "text-white hover:bg-white/10"
+                : "text-text hover:bg-muted hover:text-primary"
+            }`}
+            aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile navigation */}
@@ -233,7 +243,7 @@ export default function Header() {
       >
         <div className="min-h-0 overflow-hidden">
           <nav
-            className="mx-auto flex max-w-7xl flex-col gap-1 border-t border-white/40 px-4 py-4 sm:px-6"
+            className="mx-auto flex max-w-7xl flex-col gap-1 border-t border-border px-4 py-4 sm:px-6"
             aria-label="Mobile navigation"
           >
             {navItems.map((item) => {
@@ -247,10 +257,11 @@ export default function Header() {
                     setActiveSection(item.href.slice(1));
                     setMobileOpen(false);
                   }}
+                  aria-current={isActive ? "location" : undefined}
                   className={`rounded-lg px-4 py-3 text-sm font-medium transition-colors duration-200 ${
                     isActive
-                      ? "bg-gold/10 text-gold"
-                      : "text-text/80 hover:bg-white/40 hover:text-primary"
+                      ? "bg-gold/10 text-primary dark:text-gold"
+                      : "text-text/80 hover:bg-muted hover:text-primary dark:hover:text-gold"
                   }`}
                 >
                   {item.label}
@@ -258,19 +269,17 @@ export default function Header() {
               );
             })}
 
-            {/* Mobile actions */}
-            <div className="mt-3 grid grid-cols-1 gap-2 border-t border-white/40 pt-4">
+            {/* Mobile booking action */}
+            <div className="mt-3 border-t border-border pt-4">
               <a
                 href="https://www.booking.com/hotel/np/khwapa-chhen-bhaktapur.en-gb.html"
                 target="_blank"
-                onClick={() => {
-                  setActiveSection("rooms");
-                  setMobileOpen(false);
-                }}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-3 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+                rel="noopener noreferrer"
+                onClick={() => setMobileOpen(false)}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-primary-hover"
               >
                 <CalendarDays size={17} />
-                Book Now
+                Book a Room
               </a>
             </div>
           </nav>
