@@ -81,16 +81,19 @@ export default function BookingBar() {
             : "Garden Villa";
 
     const message = `Hello, I would like to enquire about a room.
-                  Check-In: ${checkIn}
-                  Check-Out: ${checkOut}
-                  Guests: ${guests}
-                  Room Type: ${roomType}
 
-                  Please let me know the availability and details.`.trim();
+Booking Enquiry
 
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-      message,
-    )}`;
+Check-In: ${checkIn}
+Check-Out: ${checkOut}
+Guests: ${guests}
+Room Type: ${roomType}
+
+Please let me know the availability and details.
+
+Thank you!`;
+
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
   };
